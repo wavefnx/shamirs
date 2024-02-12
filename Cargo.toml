@@ -1,0 +1,19 @@
+[package]
+name = "shamirs"
+version = "0.1.0"
+edition = "2021"
+description = "A cryptographic library for splitting a secret into multiple parts and reconstructing it using Shamir's Secret Sharing."
+license = "MPL-2.0"
+readme = "README.md"
+authors = ["wavefnx"]
+keywords = ["shamir", "secret", "sharing", "polynomial", "cryptography"]
+categories = ["cryptography", "algorithms"]
+repository = "https://github.com/wavefnx/shamirs"
+
+[dependencies]
+rand = "0.8.5"
+subtle = "2.5.0"
+zeroize = "1.7.0"
+
+[dev-dependencies]
+hex = "0.4.3"
