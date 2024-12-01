@@ -65,6 +65,58 @@ pub fn split(secret: &[u8], parts: usize, threshold: usize) -> Result<Vec<Vec<u8
     Ok(shares)
 }
 
+
+/// Generates update keys and refreshes the shares
+///
+/// ## Arguments
+/// * `shares` - Current shares to be refreshed
+///
+/// ## Returns
+/// * Updated shares if successful; otherwise, an error.
+///
+/// ## Errors
+/// * Returns an error if shares are inconsistent or invalid.
+#[cfg(feature = "refresh")]
+pub fn refresh(shares: &[Vec<u8>], threshold: usize) -> Result<Vec<Vec<u8>>, Box<dyn std::error::Error>> {
+    // Validate inputs
+    let parts = shares.len();
+    if parts < threshold || parts > 255 || !(2..=255).contains(&threshold) {
+        return Err("invalid input parameters".into());
+    }
+
+    let share_size = shares[0].len();
+    if !shares.iter().all(|share| share.len() == share_size) {
+        return Err("inconsistent share lengths".into());
+    }
+
+    // The size of the data payload in each share, excluding the x-coordinate.
+    let data_size = share_size - 1;
+
+    // Create new shares with same dimensions
+    let mut new_shares = shares.to_vec();
+
+    // For a polynomial of degree `k−1`, you need `k` distinct points to uniquely determine it,
+    // therefor we generate a polynomial of degree `threshold - 1`.
+    let degree = (threshold - 1) as u8;
+
+    for b_idx in 0..(data_size) {
+        // Create random polynomial with f(0) = 0 to maintain the original secret
+        let refresh_polynomial = Polynomial::generate(0, degree);
+
+        // Update each share's byte at this position
+        for (s_idx, share) in new_shares.iter_mut().enumerate() {
+            // Get this share's x-coordinate (stored in last byte)
+            let x_coordinate = shares[s_idx][data_size];
+            // Calculate refresh value for this share at its x-coordinate
+            let refresh_value = refresh_polynomial.evaluate(x_coordinate);
+            // Add refresh value to share (GF(2^8) addition)
+            share[b_idx] = ops::add(share[b_idx], refresh_value);
+        }
+    }
+
+    Ok(new_shares)
+}
+
 /// Combines shares to reconstruct the secret.
 ///
 /// ## Arguments
