@@ -2,7 +2,7 @@
 
 <div align="center"> 
     
-[Overview](#Overview) | [Disclaimer](#Disclaimer) | [Security](#Security) | [Acknowledgments](#Acknowledgments) | [Tests](#Tests) | [Installation](#Installation) | [Usage](#Usage) | [Examples](#Examples) | [License](#License)
+[Overview](#Overview) | [Features](#Features) | [Disclaimer](#Disclaimer) | [Security](#Security) | [Acknowledgments](#Acknowledgments) | [Tests](#Tests) | [Installation](#Installation) | [Usage](#Usage) | [Examples](#Examples) | [License](#License)
 </div>
 
 <div align="center">
@@ -25,6 +25,9 @@ ShamiRS (shamir-rs) utilizes [Sharmir's Secret Sharing](https://en.wikipedia.org
 
 A key aspect of this method is that possession of less shares than the required `threshold` amount reveals no information about the secret, which substantially reduces the risk of a single point of failure.
 
+## Features 
+- **Proactive Refresh**: Allows shares to be updated while preserving the original secret, countering perpetual leakage by preventing the accumulation of exposed shares over time. Can be enabled with the `refresh` feature flag. Highly experimental.
+
 ## Disclaimer
 The library has not been subjected to a formal security audit. It should be used at your own discretion and risk. Furthermore, backward compatibility is not guaranteed and the package is intentionally not published on crates.io until and if there's a `stable` release in the future.
 
@@ -40,7 +43,7 @@ ShamiRS places strong emphasis on security.
 The original library mentioned in the CVE report `2023-25000` has already mitigated the vulnerability, although it's crucial to exercise caution when using other libraries to verify that they do not utilize precomputed `LOG/EXP` tables, which in this case are susceptible to security vulnerabilities.
 
 ## Acknowledgments
-The current implementation is based on the Golang library developed by Hashicorp. You can find the repository [here](https://github.com/hashicorp/vault/blob/main/shamir/shamir.go).
+The current implementation is based on the Golang library developed by Hashicorp. This version is not meant to mirror the original implementation and there's no affiliation with Hashicorp or Vault. There might be changes and added features. You can find the repository [here](https://github.com/hashicorp/vault/blob/main/shamir/shamir.go).
 
 ## Tests
 Every module has it's own tests located at the end of the file, to execute them run the following command at the root of the repository:  
@@ -97,19 +100,10 @@ cargo run --example basic -q
 // --example basic: Specifies that you want to run the 'basic' example.
 // -q: Optional flag for quiet mode, which reduces unnecessary output.
 ```
-
-the output should be similar to:
-
-```sh
-share_1: 3b89c1886bf64f60176b2c429d730d3ca13d7f95b0ac380686fe948c5acae113d0
-share_2: 220bd4708ef623b926f361ab0a3be001ed29c4e73ae246cfa84e321f2646430f4f
-share_3: 15c45226d2c8582909cb8472effc35e1188e0321c7d5d7b56b66652839c8bc7555
-share_4: 9fb2d8cf52addd0c5f7a8c35e8b807f94cceeeaa61582ecc062d59da073728f388
-share_5: 099c6e7726618fe38fcdd64173067f18320a8d1d58638b7f83a2471e7bf1472570
-
-initial:   dde23b13ab8bcddaf1ee97bb6206408a1dc9a7bd656e0b96a795ea7cbf27abeb
-recovered: dde23b13ab8bcddaf1ee97bb6206408a1dc9a7bd656e0b96a795ea7cbf27abeb
-the secret was successfully reconstructed.
+For the [refresh example](examples/refresh.rs), run the following command:
+```rust
+// Note: The refresh feature must be enabled.
+cargo run --example refresh --features refresh -q
 ```
 
 ## License
