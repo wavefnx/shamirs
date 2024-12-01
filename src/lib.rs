@@ -257,4 +257,56 @@ mod tests {
 
         assert!(combine(&shares).is_err());
     }
+    // Test basic refresh functionality
+    #[test]
+    #[cfg(feature = "refresh")]
+
+    fn it_refreshes_shares() {
+        let secret = b"test_secret";
+        let threshold = 3;
+        let shares = split(secret, 5, threshold).expect("split failed");
+
+        let refreshed_shares = refresh(&shares, threshold).expect("refresh failed");
+
+        // Verify refreshed shares can reconstruct secret
+        let selected_shares = &refreshed_shares[..threshold];
+        let reconstructed = combine(selected_shares).expect("combine failed");
+        assert_eq!(reconstructed, secret);
+    }
+
+    // Test refresh with known shares
+    #[test]
+    #[cfg(feature = "refresh")]
+
+    fn it_refreshes_known_shares() {
+        // Valid known shares
+        let shares = vec![
+            vec![137, 206, 171, 244, 28, 176, 109, 4, 12, 168, 87, 50],
+            vec![162, 176, 148, 45, 83, 38, 153, 204, 80, 141, 4, 1],
+            vec![35, 165, 19, 114, 53, 31, 70, 25, 74, 248, 145, 132],
+        ];
+        let threshold = 3;
+
+        let refreshed_shares = refresh(&shares, threshold).expect("refresh failed");
+        let reconstructed = combine(&refreshed_shares[..threshold]).expect("combine failed");
+        assert_eq!(reconstructed, b"test_secret");
+    }
+
+    // Test refresh with invalid inputs
+    #[test]
+    #[cfg(feature = "refresh")]
+
+    fn it_fails_to_refresh_invalid_shares() {
+        // Inconsistent shares
+        let shares = vec![vec![1, 2], vec![3, 4, 3]];
+        assert!(refresh(&shares, 2).is_err());
+
+        // Invalid threshold - threshold must be at least 2
+        let shares = vec![vec![1, 2], vec![3, 4]];
+        assert!(refresh(&shares, 1).is_err());
+
+        // Threshold larger than number of shares
+        let shares = vec![vec![1, 2], vec![3, 4]];
+        assert!(refresh(&shares, 3).is_err());
+    }
 }
