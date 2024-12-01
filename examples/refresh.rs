@@ -50,10 +50,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Refresh the shares
     println!("# refreshed shares:");
-    // This will generate `NUM_SHARES` amount of refreshed keys and add them to the shares.
-    // refresh_key_1: 5c2664145242d8eb43912084e0ef869ac50a9903ac611415b5f53e73440fa88f
-    // refresh_key_2: ...
-    // ...
     let refreshed_shares = refresh(&initial_shares, THRESHOLD)?;
 
     // Print all refreshed shares in hex encoding
