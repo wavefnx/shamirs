@@ -45,6 +45,7 @@ impl Polynomial {
     ///
     /// ## Panics
     /// * If `x` is zero, since the evaluation at `x = 0` is not allowed.
+    ///
     /// This is a safeguard to prevent revealing the secret byte set as the constant term.
     pub(crate) fn evaluate(&self, x: u8) -> u8 {
         // Mathematically, evaluating a polynomial at `x = 0` is valid and results to the constant term (`self.coefficients[0]`).
@@ -83,6 +84,7 @@ impl Polynomial {
     ///
     /// ## Notes
     /// * This function assumes that `x_samples` and `y_samples` have the same length and contain no duplicate x-values.
+    ///
     /// The caller must ensure this for performance reasons in order to avoid reduntant checks when iterating.
     pub(crate) fn interpolate(x_samples: &[u8], y_samples: &[u8], x: u8) -> u8 {
         let limit = x_samples.len();
