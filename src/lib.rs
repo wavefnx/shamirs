@@ -65,7 +65,6 @@ pub fn split(secret: &[u8], parts: usize, threshold: usize) -> Result<Vec<Vec<u8
     Ok(shares)
 }
 
-
 /// Generates update keys and refreshes the shares
 ///
 /// ## Arguments
