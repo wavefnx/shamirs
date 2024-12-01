@@ -40,7 +40,7 @@ ShamiRS places strong emphasis on security.
 The original library mentioned in the CVE report `2023-25000` has already mitigated the vulnerability, although it's crucial to exercise caution when using other libraries to verify that they do not utilize precomputed `LOG/EXP` tables, which in this case are susceptible to security vulnerabilities.
 
 ## Acknowledgments
-The current implementation is based on the Golang library developed by Hashicorp. You can find the repository [here](https://github.com/hashicorp/vault/blob/main/shamir/shamir.go).
+The current implementation is based on the Golang library developed by Hashicorp. This version is not meant to mirror the original implementation and there's no affiliation with Hashicorp or Vault. There might be changes and added features. You can find the repository [here](https://github.com/hashicorp/vault/blob/main/shamir/shamir.go).
 
 ## Tests
 Every module has it's own tests located at the end of the file, to execute them run the following command at the root of the repository:  
