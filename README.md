@@ -1,4 +1,4 @@
-<h1 align="center"> ShamiRS </h1>
+<h1 align="center"> Shamirs </h1>
 
 <div align="center"> 
     
@@ -11,10 +11,8 @@
 [![MPL-2.0](https://img.shields.io/github/license/wavefnx/shamirs?style=flat-square&color=blue&label=)](LICENSE)
 </div>
 
-
 <div align="center">
-    
-![shamirs-logo](https://github.com/wavefnx/shamirs/assets/157986149/c3cb34a4-646f-431e-81da-73327ad98c8d)
+    <img width="800" height="448" alt="shamirs-logo" src="https://github.com/user-attachments/assets/05019995-4fb1-4603-afad-57f266aac616" />
 </div>
 
 ## Overview
