@@ -11,7 +11,7 @@ categories = ["cryptography", "algorithms"]
 repository = "https://github.com/wavefnx/shamirs"
 
 [dependencies]
-rand = "0.8.5"
+rand = "0.9.3"
 subtle = "2.5.0"
 zeroize = "1.7.0"
 
