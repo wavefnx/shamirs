@@ -1,5 +1,5 @@
 use crate::ops;
-use rand::{Rng, rngs::ThreadRng};
+use rand::{rngs::ThreadRng, Rng};
 use zeroize::Zeroize;
 
 /// A struct representing a polynomial with coefficients in `GF(2^8)`.
