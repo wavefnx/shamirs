@@ -4,6 +4,7 @@
 mod ops;
 mod polynomial;
 use polynomial::Polynomial;
+use rand::rngs::ThreadRng;
 /// Splits a secret into multiple shares.
 ///
 /// ## Arguments
@@ -26,7 +27,7 @@ pub fn split(secret: &[u8], parts: usize, threshold: usize) -> Result<Vec<Vec<u8
     let mut x_coordinates: Vec<_> = (1..=255).collect();
 
     // Shuffle to create a random permutation of the x-coordinates.
-    let mut rng = rand::thread_rng();
+    let mut rng = ThreadRng::default();
     rand::seq::SliceRandom::shuffle(x_coordinates.as_mut_slice(), &mut rng);
 
     // Set `share_size` to be equal to the length of the secret.
