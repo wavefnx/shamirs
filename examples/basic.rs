@@ -1,4 +1,4 @@
-use rand::{prelude::SliceRandom, RngCore};
+use rand::{prelude::SliceRandom, rngs::ThreadRng, Rng};
 use shamirs::{combine, split};
 
 /// The total number of parts the secret will be split into.
@@ -9,8 +9,11 @@ const THRESHOLD: usize = 3;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Init secret buffer.
     let mut secret: [u8; 32] = [0; 32];
-    // Fill the buffer with random bytes.
-    rand::thread_rng().fill_bytes(&mut secret);
+
+    // Explicitely request ThreadRng
+    let mut rng = ThreadRng::default();
+    // Fill the buffer secret with random bytes.
+    rng.fill_bytes(&mut secret);
 
     // Split the secret into shares.
     let mut shares: Vec<Vec<u8>> = split(&secret, PARTS, THRESHOLD)?;
@@ -21,8 +24,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // s2 = 46 | 50 | 1f | 7b | 38 | cc | 46 | eb | 90 | dc | a1 | 5e | 37 | 48 | 45
     // ...
 
+    // Somewhere at this point, after using `secret` you would drop it
+    //
+    // secret.zeroize();
+    //
+    // For this example we will use it's value to compare it at the end and verify/assert the secrets recovery
+
     // For demonstration purposes, we shuffle the shares in order to pick `THRESHOLD` amount of random ones later.
-    shares.shuffle(&mut rand::thread_rng());
+    // As of rand 0.10.1 rand::rng() returns `ThreadRng`.
+    shares.shuffle(&mut rand::rng());
 
     // Print all shares in hex encoding.
     // In non-demonstrative scenarios, treat each share as a secret and handle them securely,

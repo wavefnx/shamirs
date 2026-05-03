@@ -1,6 +1,6 @@
 #[cfg(feature = "refresh")]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    use rand::{thread_rng, RngCore};
+    use rand::{rngs::ThreadRng, Rng};
     use shamirs::{combine, refresh, split};
 
     /// The total number of shares the secret will be split into.
@@ -11,11 +11,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ----------------------------------------
     // --- Stage I: Initial Share Generation --
     // ----------------------------------------
+    let mut rng = ThreadRng::default();
 
     // Initialize secret buffer with random bytes
     let mut secret = [0u8; 32];
-    thread_rng().fill_bytes(&mut secret);
-    println!("secret: {}\n", hex::encode(&secret));
+    rng.fill_bytes(&mut secret);
+    println!("\nsecret: {}\n", hex::encode(&secret));
 
     // Split the secret into shares
     println!("# initial shares:");
@@ -37,11 +38,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(secret, recovered.as_slice());
 
     println!("\nrecovered: {}", hex::encode(&recovered));
-    println!("secret successfully reconstructed from shares.\n");
+    println!("secret successfully reconstructed from shares.");
 
     // ----------------------------------------
     // ---   Stage II: Proactive Refresh    ---
     // ----------------------------------------
+
+    println!("\n--- proactive refresh ---\n");
 
     // Refresh the shares
     println!("# refreshed shares:");
@@ -66,5 +69,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 #[cfg(not(feature = "refresh"))]
 fn main() {
     println!("refresh feature is not enabled");
-    println!("use: cargo run --example refresh --features refresh -q");
+    println!();
+    println!("run: cargo run -rq --features refresh --example refresh");
 }

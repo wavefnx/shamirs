@@ -1,5 +1,5 @@
 use crate::ops;
-use rand::Rng;
+use rand::{rngs::ThreadRng, Rng};
 use zeroize::Zeroize;
 
 /// A struct representing a polynomial with coefficients in `GF(2^8)`.
@@ -27,10 +27,11 @@ impl Polynomial {
         // in the size of the `degree`, plus 1 additional byte for the `intercept`.
         let mut coefficients = vec![0u8; (degree + 1) as usize];
 
+        let mut rng = ThreadRng::default();
         // Assign the constant-term (`intercept`) to the provided input.
         coefficients[0] = intercept;
         // Randomly generate the remaining coefficients.
-        rand::thread_rng().fill(&mut coefficients[1..]);
+        rng.fill_bytes(&mut coefficients[1..]);
 
         Polynomial { coefficients }
     }
