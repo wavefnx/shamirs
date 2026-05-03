@@ -27,6 +27,7 @@ pub fn split(secret: &[u8], parts: usize, threshold: usize) -> Result<Vec<Vec<u8
     let mut x_coordinates: Vec<_> = (1..=255).collect();
 
     // Shuffle to create a random permutation of the x-coordinates.
+    // ThreadRng is a CSPRNG, it should be sufficiently secure and unpredictable for this purpose.
     let mut rng = ThreadRng::default();
     rand::seq::SliceRandom::shuffle(x_coordinates.as_mut_slice(), &mut rng);
 

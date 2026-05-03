@@ -27,7 +27,9 @@ impl Polynomial {
         // in the size of the `degree`, plus 1 additional byte for the `intercept`.
         let mut coefficients = vec![0u8; (degree + 1) as usize];
 
+        // ThreadRng is a CSPRNG, it should be sufficiently secure and unpredictable for this purpose.
         let mut rng = ThreadRng::default();
+
         // Assign the constant-term (`intercept`) to the provided input.
         coefficients[0] = intercept;
         // Randomly generate the remaining coefficients.
